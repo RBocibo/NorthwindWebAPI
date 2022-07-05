@@ -1,9 +1,11 @@
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using Northwind.Core.Interfaces;
 using Northwind.Infrastructure;
 using Northwind.Infrastructure.Repositories;
 using Northwind.Services;
+using Swashbuckle.AspNetCore.SwaggerUI;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,6 +28,25 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1",
+        Title = "Northwind Web API",
+        Description = "An ASP.NET Core Web API using Onion Architecture"
+    });
+
+    var xmlFilename = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlFilenameInfrastructure = $"{Assembly.Load("Northwind.Infrastructure").GetName().Name}.xml";
+    var xmlFilenameCore = $"{Assembly.Load("Northwind.Core").GetName().Name}.xml";
+
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+    //options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilenameInfrastructure));
+    //options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilenameCore));
+    options.EnableAnnotations();
+
+});
 
 var app = builder.Build();
 
@@ -33,8 +54,21 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        options.DocExpansion(DocExpansion.None);
+        options.DisplayRequestDuration();
+        options.DefaultModelRendering(ModelRendering.Model);
+
+        options.EnableFilter();
+    });
 }
+
+app.UseReDoc(options =>
+{
+    options.DocumentTitle = "South West Traders Order Management API";
+    options.SpecUrl = "/swagger/v1/swagger.json";
+});
 
 app.UseHttpsRedirection();
 
