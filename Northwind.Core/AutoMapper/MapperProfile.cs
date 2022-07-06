@@ -1,11 +1,6 @@
 ﻿using AutoMapper;
 using Northwind.API.Models;
 using Northwind.Core.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Northwind.Core.AutoMapper
 {
@@ -15,6 +10,15 @@ namespace Northwind.Core.AutoMapper
         {
             CreateMap<Category, CategoryDTO>();
             CreateMap<CategoryDTO, Category>();
+            CreateMap<Customer, CustomerDTO>();
+            CreateMap<Employee, EmployeeDTO>();
+            CreateMap<Order, OrdersDTO>();
+            CreateMap<Customer, GetCustomerDTO>();
+            CreateMap<Supplier, SuppliersDTO>();
+            CreateMap<Customer, CustomersFromBuenosAiresDTO>();
+            CreateMap<Product, GetProductOutOfStockDTO>();
+            CreateMap<Customer, GetCustomerNotFromMexicoSpainGermanyDTO>();
+            CreateMap<Order, OrdersPlacedMayDTO>();
         }
     }
 }

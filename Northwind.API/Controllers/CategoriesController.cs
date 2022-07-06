@@ -8,7 +8,7 @@ namespace Northwind.API.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Produces("application/json")]
-    [SwaggerTag("Provides operations to manage application version")]
+    [SwaggerTag("Provides operations to manage categories")]
     public class CategoriesController : ControllerBase
     {
         /// <summary>
